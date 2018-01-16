@@ -9,6 +9,7 @@ public class SlowOperation implements Runnable {
   @Override
   public void run() {
     LOGGER.quiet("Starting slow task");
+//    gw.lang.reflect.gs.GosuClassPathThing.init(); //TODO not even necessary to explicitly call this?
     try {
       Thread.sleep(2000);
     } catch (InterruptedException e) {

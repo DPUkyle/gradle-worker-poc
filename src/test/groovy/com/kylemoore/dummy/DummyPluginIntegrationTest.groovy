@@ -17,15 +17,33 @@ class DummyPluginIntegrationTest extends Specification {
   String buildScriptContent = 
   """
     plugins {
-        id 'com.kylemoore.dummy'
+        id 'com.kylemoore.dummy' apply false
     }
+    
+    repositories {
+      jcenter()
+    }
+    
+//    configurations {
+//      gosu
+//    }
+//    
+//    dependencies {
+//      gosu 'org.gosu-lang.gosu:gosu-core:1.14.7'
+//    }
+    
+    apply plugin: 'com.kylemoore.dummy'
   """
 
   @Rule
   final TemporaryFolder testProjectDir = new TemporaryFolder()
+
+//  @Rule
+//  final TemporaryFolder testKitDir = new TemporaryFolder()
   
   def setup() {
     testProjectDir.create()
+//    testKitDir.create()
     buildScript = testProjectDir.newFile('build.gradle')
   }
   
@@ -36,11 +54,12 @@ class DummyPluginIntegrationTest extends Specification {
     when:
     GradleRunner runner = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
+//            .withTestKitDir(testKitDir.root)
             .withPluginClasspath()
             .withArguments('slowTask', '-is')
-            //.withDebug(true)
+            .withDebug(true) //FIXME this causes exit 143 and system.err for Gosu typesystem shutdown
             .forwardOutput()
-            .withGradleVersion(gradleVersion)
+//            .withGradleVersion(gradleVersion)
 
     BuildResult result = runner.build()
 
@@ -49,7 +68,7 @@ class DummyPluginIntegrationTest extends Specification {
     result.task(":slowTask").outcome == SUCCESS
     
     where:
-    gradleVersion << ['4.2.1', '4.4.1']
+    gradleVersion << ['4.4.1'] //['4.2.1', '4.4.1']
   }
 
 }
