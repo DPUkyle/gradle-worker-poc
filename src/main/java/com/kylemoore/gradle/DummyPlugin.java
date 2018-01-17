@@ -9,7 +9,6 @@ public class DummyPlugin implements Plugin<Project> {
   @Override
   public void apply( Project project ) {
     SlowRunningTask srt = project.getTasks().create("slowTask", SlowRunningTask.class);
-    //srt.setClasspath(project.getConfigurations().getByName("gosu"));
   }
   
 }

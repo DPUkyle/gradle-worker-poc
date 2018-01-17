@@ -13,7 +13,6 @@ repositories {
 
 dependencies {
     compile     gradleApi()
-    //compile 'org.gosu-lang.gosu:gosu-core-api:1.14.7'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.easytesting:fest-assert:1.3'
