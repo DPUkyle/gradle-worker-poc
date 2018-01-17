@@ -1,6 +1,12 @@
 When 'upgrading' gradle-gosu-plugin to leverage the new Gradle Worker API, I am concerned about strange system.err dumps during test shutdown.
 
-The tests run just fine, but I have a hunch this is related to the TestKit API getting confused when it spawns multiple client workers.
+The tests run successfully ~, but I have a hunch this is related to the TestKit API getting confused when it spawns multiple client workers~.
+
+**UPDATE:** The cause of the below stack trace seems to be caused by invoking a build from o.g.t.r.GradleRunner with debug set to true.
+If that TestKit build then executes a task which spawns a worker (IsolationMode.PROCESS), the worker does not shutdown cleanly.
+_Removing `.withDebug(true)` from the GradleRunner configuration makes the issue disappear._
+
+So, this has no apparent effect on the plugin under test, but the ST was scary and I worry that it could lead other plugin authors down the wrong path.
 
 Example ST:
 ```
